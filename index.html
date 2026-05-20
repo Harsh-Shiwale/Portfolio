@@ -78,7 +78,46 @@
     /* ── HERO ── */
     #hero { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; padding: 6rem 3rem 4rem; }
     .hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 420px; gap: 5rem; align-items: center; }
-    .hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; animation: fadeUp 0.5s ease both; }
+    .hero-left { display: flex; flex-direction: column; }
+
+    /* Photo + eyebrow row */
+    .hero-top-row { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; animation: fadeUp 0.5s ease both; }
+    .hero-avatar-wrap {
+      position: relative; flex-shrink: 0;
+    }
+    .hero-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--surface2);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 4px rgba(56,189,248,0.08), 0 0 20px rgba(56,189,248,0.15);
+      position: relative;
+    }
+    .hero-avatar img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+    }
+    /* Fallback initials when no photo */
+    .avatar-initials {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      user-select: none;
+    }
+    .avatar-ring {
+      position: absolute; inset: -5px; border-radius: 50%;
+      border: 1px solid rgba(56,189,248,0.25);
+      animation: spin-slow 12s linear infinite;
+      background: conic-gradient(from 0deg, rgba(56,189,248,0.3) 0deg, transparent 120deg, transparent 360deg);
+    }
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+    .hero-eyebrow-block { display: flex; flex-direction: column; gap: 0.2rem; }
+    .hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+    .hero-location { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+
     h1 { font-family: 'Fraunces', serif; font-size: clamp(2.8rem, 4.5vw, 4.2rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--white); animation: fadeUp 0.5s 0.08s ease both; }
     h1 em { font-style: italic; color: var(--accent); }
     .hero-role { font-size: 13px; color: var(--muted); margin-top: 1rem; letter-spacing: 0.02em; animation: fadeUp 0.5s 0.16s ease both; }
@@ -113,8 +152,15 @@
     /* ── SECTIONS ── */
     section { position: relative; z-index: 1; padding: 5.5rem 3rem; }
     .container { max-width: 1200px; margin: 0 auto; }
-    .section-label { display: flex; align-items: center; gap: 1rem; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 3rem; }
+
+    /* Section label — no numbers, clean slash style */
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 3rem;
+    }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
     h2 { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 2.5vw, 2.4rem); color: var(--white); letter-spacing: -0.02em; line-height: 1.1; }
     .sep { border: none; border-top: 1px solid var(--border); }
 
@@ -146,17 +192,99 @@
     .tag { font-size: 10px; padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted); border-radius: 2px; }
     .tag.hi { border-color: rgba(56,189,248,0.3); color: var(--accent); background: var(--accent-glow); }
 
-    /* ── EXPERIENCE ── */
-    .exp-block { border: 1px solid var(--border); background: var(--surface); overflow: hidden; }
-    .exp-header { padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-    .exp-company { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--white); letter-spacing: -0.01em; }
-    .exp-role { font-size: 12px; color: var(--accent); margin-top: 0.2rem; }
-    .exp-meta { text-align: right; font-size: 11px; color: var(--muted); line-height: 1.6; }
-    .exp-section-title { padding: 1.25rem 2rem 0.25rem; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border-top: 1px solid var(--border); }
-    .exp-section-title:first-of-type { border-top: none; }
-    .exp-bullets { list-style: none; padding: 0.75rem 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
-    .exp-bullets li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 12.5px; color: var(--muted); line-height: 1.75; }
-    .exp-bullets li::before { content: '▸'; color: var(--accent); flex-shrink: 0; margin-top: 0.05rem; }
+    /* ── EXPERIENCE — redesigned ── */
+    .exp-block {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .exp-header {
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+    }
+    .exp-company {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .exp-role {
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 0.35rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .exp-meta {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .exp-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.4rem;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .exp-meta-pill .dot { color: var(--accent); }
+
+    /* Accordion-style sections inside experience */
+    .exp-section {
+      border-top: 1px solid var(--border);
+    }
+    .exp-section-title {
+      padding: 1rem 2.5rem;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(56,189,248,0.03);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .exp-section-title::before {
+      content: '';
+      width: 3px; height: 12px;
+      background: var(--accent);
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .exp-bullets li {
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      gap: 0.75rem;
+      align-items: baseline;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .exp-bullets li::before {
+      content: '▸';
+      color: var(--accent);
+      font-size: 10px;
+      margin-top: 0.35rem;
+    }
     .exp-bullets li strong { color: var(--text); }
 
     /* ── PROJECTS ── */
@@ -168,8 +296,6 @@
     .project-role { font-size: 10px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
     .project-desc { color: var(--muted); font-size: 12px; line-height: 1.8; }
     .project-footer { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-
-    /* Project highlights */
     .project-highlights { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
     .project-highlight { display: flex; gap: 0.6rem; font-size: 11.5px; color: var(--muted); line-height: 1.6; }
     .project-highlight::before { content: '→'; color: var(--accent); flex-shrink: 0; }
@@ -212,6 +338,10 @@
       .skills-wrapper { grid-template-columns: 1fr 1fr; }
       .projects-grid, .ach-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .exp-header { grid-template-columns: 1fr; }
+      .exp-meta { text-align: left; }
+      .exp-bullets { padding: 1.25rem 1.5rem; }
+      .exp-section-title { padding: 0.85rem 1.5rem; }
     }
     @media (max-width: 560px) { .skills-wrapper { grid-template-columns: 1fr; } }
   </style>
@@ -235,7 +365,21 @@
   <section id="hero">
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow">// Data Engineer · Nagpur, India</div>
+
+        <!-- Avatar + eyebrow row -->
+        <div class="hero-top-row">
+          <div class="hero-avatar-wrap">
+            <div class="avatar-ring"></div>
+            <div class="hero-avatar">
+              <img src="Profile Photo.jpg" alt="Harsh Shiwale" />
+            </div>
+          </div>
+          <div class="hero-eyebrow-block">
+            <div class="hero-eyebrow">// Data Engineer</div>
+            <div class="hero-location">Nagpur, India · Open to Remote &amp; Relocation</div>
+          </div>
+        </div>
+
         <h1>Pipelines<br />built for<br /><em>scale.</em></h1>
         <p class="hero-role">Cognizant Technology Solutions · Programmer Analyst</p>
         <p class="hero-desc">
@@ -307,7 +451,7 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container">
-      <div class="section-label">01 // About</div>
+      <div class="section-label">// About</div>
       <div class="about-grid reveal">
         <div class="about-text">
           <h2>Engineering data pipelines that <em style="font-style:italic;color:var(--accent)">just work.</em></h2>
@@ -367,7 +511,7 @@
   <!-- SKILLS -->
   <section id="skills">
     <div class="container">
-      <div class="section-label">02 // Technical Skills</div>
+      <div class="section-label">// Technical Skills</div>
       <div class="skills-wrapper reveal">
         <div class="skill-card">
           <div class="skill-icon">⚡</div>
@@ -450,42 +594,50 @@
   <!-- EXPERIENCE -->
   <section id="experience">
     <div class="container">
-      <div class="section-label">03 // Experience</div>
+      <div class="section-label">// Experience</div>
       <div class="exp-block reveal">
+
         <div class="exp-header">
           <div>
             <div class="exp-company">Cognizant Technology Solutions</div>
             <div class="exp-role">Programmer Analyst — Data Engineer</div>
           </div>
           <div class="exp-meta">
-            <div>2023 – Present</div>
-            <div>Pune, India</div>
+            <div class="exp-meta-pill"><span class="dot">◆</span> 2023 – Present</div>
+            <div class="exp-meta-pill"><span class="dot">◆</span> Pune, India</div>
           </div>
         </div>
 
-        <div class="exp-section-title">// Data Modernization & Databricks Migration</div>
-        <ul class="exp-bullets">
-          <li>Led end-to-end migration of <strong>300+ Oracle/Informatica ETL workflows</strong> to Azure Databricks using PySpark and Delta Lake, operating within structured SDLC and agile delivery processes.</li>
-          <li>Developed complex PySpark DataFrame transformations; achieved <strong>~30% pipeline performance improvement</strong> via broadcast joins, early filtering, partition tuning, and shuffle reduction.</li>
-          <li>Implemented <strong>CDC and incremental load patterns</strong> using Delta Lake MERGE operations, reducing batch processing latency and improving pipeline maintainability.</li>
-          <li>Analyzed Spark execution plans to identify and resolve bottlenecks; applied caching and plan tuning to stabilize production workloads.</li>
-          <li>Built robust <strong>SQL-based validation frameworks</strong> — record reconciliation, null checks, schema validation, duplicate detection — ensuring accuracy across environments.</li>
-          <li>Designed <strong>YAML-driven orchestration pipelines</strong> to automate UAT and production deployments, improving release reliability and reducing manual intervention.</li>
-          <li>Debugged and resolved production pipeline failures to maintain data accuracy and system stability in mission-critical environments.</li>
-        </ul>
+        <div class="exp-section">
+          <div class="exp-section-title">Data Modernization &amp; Databricks Migration</div>
+          <ul class="exp-bullets">
+            <li><span>Led end-to-end migration of <strong>300+ Oracle/Informatica ETL workflows</strong> to Azure Databricks using PySpark and Delta Lake, operating within structured SDLC and agile delivery processes.</span></li>
+            <li><span>Developed complex PySpark DataFrame transformations; achieved <strong>~30% pipeline performance improvement</strong> via broadcast joins, early filtering, partition tuning, and shuffle reduction.</span></li>
+            <li><span>Implemented <strong>CDC and incremental load patterns</strong> using Delta Lake MERGE operations, reducing batch processing latency and improving pipeline maintainability.</span></li>
+            <li><span>Analyzed Spark execution plans to identify and resolve bottlenecks; applied caching and plan tuning to stabilize production workloads.</span></li>
+            <li><span>Built robust <strong>SQL-based validation frameworks</strong> — record reconciliation, null checks, schema validation, duplicate detection — ensuring accuracy across environments.</span></li>
+            <li><span>Designed <strong>YAML-driven orchestration pipelines</strong> to automate UAT and production deployments, improving release reliability and reducing manual intervention.</span></li>
+            <li><span>Debugged and resolved production pipeline failures to maintain data accuracy and system stability in mission-critical environments.</span></li>
+          </ul>
+        </div>
 
-        <div class="exp-section-title">// AWS File Automation & Cloud Infrastructure</div>
-        <ul class="exp-bullets">
-          <li>Engineered <strong>event-driven cross-bucket file transfer workflows</strong> using AWS S3, Lambda, and SNS — enabling automated, scalable file processing with zero manual intervention.</li>
-          <li>Implemented least-privilege <strong>IAM policies and Secrets Manager integration</strong> for secure, governed data access across AWS environments.</li>
-          <li>Developed full-cycle AWS solutions including resource provisioning (EC2, IAM), event triggers, and notification pipelines.</li>
-        </ul>
+        <div class="exp-section">
+          <div class="exp-section-title">AWS File Automation &amp; Cloud Infrastructure</div>
+          <ul class="exp-bullets">
+            <li><span>Engineered <strong>event-driven cross-bucket file transfer workflows</strong> using AWS S3, Lambda, and SNS — enabling automated, scalable file processing with zero manual intervention.</span></li>
+            <li><span>Implemented least-privilege <strong>IAM policies and Secrets Manager integration</strong> for secure, governed data access across AWS environments.</span></li>
+            <li><span>Developed full-cycle AWS solutions including resource provisioning (EC2, IAM), event triggers, and notification pipelines.</span></li>
+          </ul>
+        </div>
 
-        <div class="exp-section-title">// Python Automation & Tooling</div>
-        <ul class="exp-bullets">
-          <li>Created <strong>Python automation scripts</strong> to extract table names and source paths from Excel tracking sheets, significantly reducing manual monitoring overhead.</li>
-          <li>Collaborated cross-functionally with business, upstream, and platform teams to deliver reliable, scalable data solutions aligned with firm-wide objectives.</li>
-        </ul>
+        <div class="exp-section">
+          <div class="exp-section-title">Python Automation &amp; Tooling</div>
+          <ul class="exp-bullets">
+            <li><span>Created <strong>Python automation scripts</strong> to extract table names and source paths from Excel tracking sheets, significantly reducing manual monitoring overhead.</span></li>
+            <li><span>Collaborated cross-functionally with business, upstream, and platform teams to deliver reliable, scalable data solutions aligned with firm-wide objectives.</span></li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </section>
@@ -495,13 +647,13 @@
   <!-- PROJECTS -->
   <section id="projects">
     <div class="container">
-      <div class="section-label">04 // Projects</div>
+      <div class="section-label">// Projects</div>
       <div class="projects-grid reveal">
 
         <div class="project-card">
           <div class="project-num">01</div>
           <div class="project-role">Databricks Data Engineer · 2024 – Present</div>
-          <div class="project-title">Enterprise Data Modernization & Migration</div>
+          <div class="project-title">Enterprise Data Modernization &amp; Migration</div>
           <p class="project-desc">Led end-to-end migration of Oracle/Informatica ETL workflows to Azure Databricks. Implemented CDC and incremental loads via Delta Lake MERGE, cut batch dependencies, and optimized Spark execution plans. Built YAML-driven orchestration pipelines for UAT and production deployments.</p>
           <div class="project-highlights">
             <div class="project-highlight"><strong>300+</strong> workflows migrated from legacy stack</div>
@@ -543,7 +695,7 @@
           <div class="project-num">03</div>
           <div class="project-role">Databricks Automation · 2024</div>
           <div class="project-title">Databricks Metadata Table Extraction</div>
-          <p class="project-desc">Automation utility that resolves source table names from Excel input into fully qualified Databricks paths using <code style="color:var(--accent);font-size:11px">system.information_schema</code>. Eliminates manual catalog lookups across multiple environments. Reduced table resolution from days of manual effort to seconds.</p>
+          <p class="project-desc">Automation utility that resolves source table names from Excel input into fully qualified Databricks paths using <code style="color:var(--accent);font-size:11px">system.information_schema</code>. Eliminates manual catalog lookups across multiple environments.</p>
           <div class="project-highlights">
             <div class="project-highlight">Queries across <strong>multiple Databricks catalogs</strong> dynamically</div>
             <div class="project-highlight">Handles comma-separated multi-table inputs &amp; prefix parsing</div>
@@ -556,7 +708,6 @@
             <span class="tag hi">Databricks</span>
             <span class="tag">Pandas</span>
             <span class="tag">OpenPyXL</span>
-            <span class="tag">system.information_schema</span>
             <span class="tag">Databricks Widgets</span>
           </div>
         </div>
@@ -589,7 +740,7 @@
   <!-- ACHIEVEMENTS -->
   <section id="achievements">
     <div class="container">
-      <div class="section-label">05 // Achievements</div>
+      <div class="section-label">// Achievements</div>
       <div class="ach-grid reveal">
         <div class="ach-card">
           <div class="ach-icon">🏅</div>
@@ -615,7 +766,7 @@
         <div class="ach-card">
           <div class="ach-icon">🚀</div>
           <div>
-            <div class="ach-title">Critical UAT & Production Deployments</div>
+            <div class="ach-title">Critical UAT &amp; Production Deployments</div>
             <div class="ach-desc">Recognized for supporting successful UAT and production deployments during critical phases of the enterprise ETL migration initiative.</div>
           </div>
         </div>
@@ -629,7 +780,7 @@
   <section id="contact">
     <div class="container">
       <div class="contact-inner reveal">
-        <div class="section-label" style="justify-content:center">06 // Contact</div>
+        <div class="section-label" style="justify-content:center">// Contact</div>
         <h2>Let's work<br /><em style="font-style:italic;color:var(--accent)">together.</em></h2>
         <p>Open to full-time data engineering roles at product-based companies.<br />Based in Nagpur, India · Available for remote &amp; relocation opportunities.</p>
         <a href="mailto:harshshivale01@gmail.com" class="contact-email">harshshivale01@gmail.com →</a>
